@@ -1,0 +1,56 @@
+
+
+{% include 'main.jinja' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<main class="settingsPage profile my-md">
+  <div class="container ">
+    <div class="layout">
+      <div class="column column--2of3">
+        <div class="settings">
+            <h3 class="settings__title">Task List</h3>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'todo-create' %}"><i class="im im-plus"></i> Add ToDo</a>
+        </div>
+
+        <form method="POST">
+          {% csrf_token %}
+          {{ choices.as_p}}
+          <input type="submit" value="submit">
+        </form>
+
+        <table class="settings__table">
+            {% for todo in todos %}
+            <tr>
+              <td class="settings__tableInfo">
+                <h4>{{todo.title}}</h4>
+                <h4>Created: {{ todo.created|date:'d M, Y' }}</h4>
+                <h4>Deadline: {{ todo.due_date|date:'d M, Y' }}</h4>
+              </td>
+              <td class="settings__tableInfo">
+                {% if todo.complete %}
+                <input type="checkbox" class="input input--checkbox" checked>
+                {% else %}
+                <input type="checkbox" class="input input--checkbox">
+                {% endif %}
+                
+                <!-- <h4>Status: {{todo.complete}}</h4> -->
+              </td>
+              
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'todo-update' todo.id %}"><i class="im im-edit"></i> Edit</a>
+              </td>
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'todo-delete' todo.id %}"><i class="im im-x-mark-circle-o"></i>Delete</a>
+              </td>
+            </tr>
+            {% endfor %} 
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
